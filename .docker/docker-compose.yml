@@ -1,0 +1,49 @@
+version: '2'
+services:
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    volumes:
+      - '../symfony_app:/app'
+    environment:
+      - SYMFONY_PROJECT_NAME=myapp
+      - MARIADB_HOST=mariadb
+      - MARIADB_PORT_NUMBER=3306
+      - MARIADB_USER=bobby
+      - MARIADB_PASSWORD=tables
+      - MARIADB_DATABASE=symfony_app
+      - SYMFONY_DATABASE_PASSWORD=tables
+    depends_on:
+      - mariadb
+    networks:
+      - project_symfony_network
+
+  mariadb:
+    image: 'bitnami/mariadb:10.3'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bobby
+      - MARIADB_PASSWORD=tables
+      - MARIADB_DATABASE=symfony_app
+    networks:
+      - project_symfony_network
+
+  phpmyadmin:
+    env_file:
+      - .env
+    image: phpmyadmin/phpmyadmin
+    container_name: "${PROJECT_NAME}-phpmyadmin"
+    expose:
+      - 80
+    networks:
+      - project_symfony_network
+
+volumes:
+  data:
+
+networks:
+  project_symfony_network:
