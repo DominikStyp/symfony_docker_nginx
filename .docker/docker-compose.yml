@@ -1,6 +1,7 @@
 version: '2'
 services:
 
+  # http://localhost:8000
   web:
     build:
       context: ./web
@@ -32,13 +33,19 @@ services:
     networks:
       - project_symfony_network
 
+  # http://localhost:8080
   phpmyadmin:
-    env_file:
-      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - PMA_HOST=mariadb
+      # if you don't want to log in every time to phpmyadmin
+      # leave the following variables intact
+      - PMA_USER=bobby
+      - PMA_PASSWORD=tables
+      - PMA_ARBITRARY=1
     image: phpmyadmin/phpmyadmin
-    container_name: "${PROJECT_NAME}-phpmyadmin"
-    expose:
-      - 80
+    ports:
+      - '8080:80'
     networks:
       - project_symfony_network
 
