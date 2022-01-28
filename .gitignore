@@ -1,3 +1,6 @@
+/symfony_app/*
+!/symfony_app/.gitignore
+
 # Cache and logs (Symfony2)
 /app/cache/*
 /app/logs/*
