@@ -3,6 +3,7 @@ services:
 
   # http://localhost:8000
   web:
+    container_name: "project_symfony_network_web"
     build:
       context: ./web
       dockerfile: Dockerfile
@@ -19,11 +20,12 @@ services:
       - MARIADB_DATABASE=symfony_app
       - SYMFONY_DATABASE_PASSWORD=tables
     depends_on:
-      - mariadb
+      - database
     networks:
       - project_symfony_network
 
-  mariadb:
+  database:
+    container_name: "project_symfony_network_database"
     image: 'bitnami/mariadb:10.3'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
@@ -35,9 +37,10 @@ services:
 
   # http://localhost:8080
   phpmyadmin:
+    container_name: "project_symfony_network_phpmyadmin"
     environment:
       - MYSQL_ROOT_PASSWORD=
-      - PMA_HOST=mariadb
+      - PMA_HOST=database
       # if you don't want to log in every time to phpmyadmin
       # leave the following variables intact
       - PMA_USER=bobby
