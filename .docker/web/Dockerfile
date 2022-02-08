@@ -1,7 +1,13 @@
 # has php 7.4
 FROM bitnami/symfony:6.0
 # COPY prepare-command.sh /prepare-command.sh
-# RUN apt-get update > /dev/null && apt-get install -y rsync procps net-tools acl > /dev/null
+RUN apt-get update > /dev/null \
+    && apt-get install -y rsync procps net-tools acl > /dev/null \
+    && apt-get install -y wget \
+    # install symfony installer
+    && wget https://get.symfony.com/cli/installer -O - | bash \
+    # move installer to bin
+    && mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
 # install mysqldump which is needed for laravel `php artisan schema:dump` command
 # RUN apt-get install -y default-mysql-client
